@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AeroNexus — Smart Airport Management System</title>
+  <meta name="description" content="Advanced Airport Management System with real-time flight tracking, passenger management, smart gate allocation, and AI-powered delay prediction."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+  <div class="loader-content">
+    <div class="loader-plane">✈</div>
+    <div class="loader-bar"><div class="loader-fill"></div></div>
+    <p>Initialising AeroNexus Systems…</p>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- Modal Backdrop -->
+<div id="modal-backdrop" class="hidden">
+  <div id="modal-box">
+    <div id="modal-header">
+      <span id="modal-title">Modal</span>
+      <button id="modal-close" onclick="AMS.modal.close()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div id="app">
+  <!-- ===== SIDEBAR ===== -->
+  <aside id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">✈</div>
+      <div>
+        <div class="brand-name">AeroNexus</div>
+        <div class="brand-sub">DEL · IGIA</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">MAIN</div>
+      <a class="nav-item active" data-page="dashboard" onclick="AMS.navigate('dashboard')">
+        <span class="nav-icon">⬛</span><span class="nav-label">Live Dashboard</span>
+        <span class="nav-badge live-badge">LIVE</span>
+      </a>
+      <a class="nav-item" data-page="flights" onclick="AMS.navigate('flights')">
+        <span class="nav-icon">🛫</span><span class="nav-label">Flight Management</span>
+      </a>
+      <a class="nav-item" data-page="passengers" onclick="AMS.navigate('passengers')">
+        <span class="nav-icon">👤</span><span class="nav-label">Passengers</span>
+      </a>
+      <a class="nav-item" data-page="checkin" onclick="AMS.navigate('checkin')">
+        <span class="nav-icon">✅</span><span class="nav-label">Check-in System</span>
+      </a>
+
+      <div class="nav-section-label">OPERATIONS</div>
+      <a class="nav-item" data-page="staff" onclick="AMS.navigate('staff')">
+        <span class="nav-icon">🛡</span><span class="nav-label">Staff & Admin</span>
+      </a>
+      <a class="nav-item" data-page="gates" onclick="AMS.navigate('gates')">
+        <span class="nav-icon">🚪</span><span class="nav-label">Gate Allocation</span>
+      </a>
+      <a class="nav-item" data-page="delay" onclick="AMS.navigate('delay')">
+        <span class="nav-icon">⚠</span><span class="nav-label">Delay Prediction</span>
+      </a>
+      <a class="nav-item" data-page="seats" onclick="AMS.navigate('seats')">
+        <span class="nav-icon">💺</span><span class="nav-label">Seat Allocation</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="weather-widget" id="sidebar-weather">
+        <span class="weather-icon">🌤</span>
+        <div>
+          <div class="weather-temp">32°C</div>
+          <div class="weather-desc">New Delhi · Partly Cloudy</div>
+        </div>
+      </div>
+      <div class="sidebar-clock" id="sidebar-clock">--:--:--</div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN AREA ===== -->
+  <div id="main">
+    <header id="header">
+      <div class="header-left">
+        <button class="sidebar-toggle" onclick="AMS.toggleSidebar()">☰</button>
+        <div>
+          <div class="header-title" id="header-title">Live Dashboard</div>
+          <div class="header-sub">Indira Gandhi International Airport, New Delhi</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="api-status" id="api-status">
+          <span class="status-dot mock"></span> Mock Data
+        </div>
+        <button class="icon-btn" id="notif-btn" onclick="AMS.toggleNotifications()">
+          🔔 <span class="notif-count" id="notif-count">3</span>
+        </button>
+        <div class="notif-dropdown hidden" id="notif-dropdown"></div>
+        <div class="header-user">
+          <div class="user-avatar">A</div>
+          <div>
+            <div class="user-name">Admin</div>
+            <div class="user-role">Airport Manager</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="content">
+      <!-- Each page section -->
+      <section id="page-dashboard" class="page active"></section>
+      <section id="page-flights"   class="page"></section>
+      <section id="page-passengers"class="page"></section>
+      <section id="page-checkin"   class="page"></section>
+      <section id="page-staff"     class="page"></section>
+      <section id="page-gates"     class="page"></section>
+      <section id="page-delay"     class="page"></section>
+      <section id="page-seats"     class="page"></section>
+    </main>
+  </div>
+</div>
+
+<!-- Scripts — order matters -->
+<script src="data/mock.js"></script>
+<script src="app.js"></script>
+<script src="modules/dashboard.js"></script>
+<script src="modules/flights.js"></script>
+<script src="modules/passengers.js"></script>
+<script src="modules/checkin.js"></script>
+<script src="modules/staff.js"></script>
+<script src="modules/gates.js"></script>
+<script src="modules/delay.js"></script>
+<script src="modules/seats.js"></script>
+<script>AMS.boot();</script>
+</body>
+</html>
